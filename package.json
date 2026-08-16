@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mlc-ai/web-llm": "^0.2.84",
+    "@huggingface/transformers": "^4.2.0",
+    "@wllama/wllama": "^3.5.1",
     "clsx": "^2.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

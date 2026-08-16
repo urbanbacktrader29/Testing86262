@@ -67,18 +67,18 @@ function BotSetup({ defaultCoinIds, onActivate }: { defaultCoinIds: string[]; on
       <div>
         <h1 className="text-2xl font-semibold text-slate-100">Auto-Trading-Bot</h1>
         <p className="text-slate-500 text-sm mt-1">
-          Handelt vollautomatisch anhand einer lokal im Browser laufenden KI — einmal aktivieren, läuft danach eigenständig weiter.
+          Handelt vollautomatisch anhand eines winzigen, quelloffenen KI-Modells im Backend — einmal aktivieren, läuft danach eigenständig weiter.
         </p>
       </div>
 
       <div className="bg-amber-500/10 border border-amber-500/30 text-amber-200 rounded-lg px-4 py-3 text-sm leading-relaxed">
         <span className="font-semibold">Papier-Trading (simuliert).</span> Der Bot handelt mit virtuellem Kapital — es
-        fließt kein echtes Geld. Kurse basieren auf echten Binance-Daten, die Signale kommen von einem KI-Modell
-        (Llama 3.2), das komplett lokal in deinem Browser läuft — kein API-Schlüssel, keine Serverkosten, aber ein
-        WebGPU-fähiger Browser nötig (aktuelles Chrome/Edge, am besten Desktop/Laptop) und ein einmaliger ~2,3-GB-
-        Download beim ersten Signal. Der Bot läuft nur, solange dieser Tab in diesem Browser geöffnet ist — jede
-        Auswertung braucht Rechenleistung deines eigenen Geräts. Anders als eine rein regelbasierte Version kann er
-        verpasste Zeit (Tab geschlossen) nicht rückwirkend simulieren — er bewertet beim nächsten Zyklus einfach live weiter.
+        fließt kein echtes Geld. Kurse basieren auf echten Binance-Daten, die Signale kommen von einem winzigen
+        quelloffenen KI-Modell (SmolLM2-360M), das serverseitig läuft — kein API-Schlüssel, keine laufenden Kosten,
+        aber dadurch auch spürbar weniger zuverlässig als große Sprachmodelle (Begründungen können ungenau oder
+        inkonsistent sein — die Kalibrierungs-Sperre unten fängt systematisch überschätzte Konfidenz ab). Anders als
+        eine rein regelbasierte Version kann der Bot verpasste Zeit (Tab geschlossen) nicht rückwirkend simulieren —
+        er bewertet beim nächsten Zyklus einfach live weiter.
       </div>
 
       <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 sm:p-5 flex flex-col gap-5">
@@ -403,7 +403,7 @@ function BotDashboard({
       </div>
 
       <div className="bg-amber-500/10 border border-amber-500/30 text-amber-200 rounded-lg px-4 py-2.5 text-xs leading-relaxed">
-        <span className="font-semibold">Papier-Trading (simuliert)</span> — virtuelles Kapital, Signale von einer lokal im Browser laufenden KI.
+        <span className="font-semibold">Papier-Trading (simuliert)</span> — virtuelles Kapital, Signale von einem winzigen quelloffenen KI-Modell (serverseitig, kein API-Schlüssel).
       </div>
 
       <RiskThrottleBanner closedTradesChronological={closedTradesChronological} />
@@ -533,15 +533,16 @@ function BotDashboard({
       <CalibrationPanel closedTrades={closedTrades} calibrationSkips={state.calibrationSkips} />
 
       <div className="text-[11px] text-slate-500 leading-relaxed bg-slate-900/40 border border-slate-800 rounded-xl p-4">
-        Regelbasierte Risiko-Engine um ein lokal im Browser laufendes KI-Modell (Llama 3.2, WebGPU) herum, simuliert.
-        Der Bot eröffnet automatisch eine Position, sobald ein Coin aus deiner Beobachtungsliste ein bestätigtes
-        KI-Signal erreicht (alle 15 Minuten neu bewertet), und schließt sie bei Erreichen von Take-Profit oder
-        Stop-Loss (sekündlich gegen den Live-Preis geprüft, solange diese Seite geöffnet ist). Entry/SL/TP sind fest
-        aus echter ATR-Volatilität berechnet, nie vom Modell geschätzt. Verpasste Zeit (Tab geschlossen) wird nicht
-        rückwirkend simuliert — anders als eine rein regelbasierte Version kann ein LLM-Urteil nicht günstig und
-        deterministisch für die Vergangenheit neu berechnet werden. Die Analyse läuft komplett auf deinem Gerät —
-        kein Server, kein API-Schlüssel, aber auch keine Auswertung, wenn der Tab geschlossen oder das Gerät zu
-        schwach für WebGPU ist. Lernen
+        Regelbasierte Risiko-Engine um ein winziges, quelloffenes KI-Modell (SmolLM2-360M, serverseitig, kein
+        API-Schlüssel) herum, simuliert. Der Bot eröffnet automatisch eine Position, sobald ein Coin aus deiner
+        Beobachtungsliste ein bestätigtes KI-Signal erreicht (alle 15 Minuten neu bewertet), und schließt sie bei
+        Erreichen von Take-Profit oder Stop-Loss (sekündlich gegen den Live-Preis geprüft, solange diese Seite
+        geöffnet ist). Entry/SL/TP sind fest aus echter ATR-Volatilität berechnet, nie vom Modell geschätzt. Verpasste
+        Zeit (Tab geschlossen) wird nicht rückwirkend simuliert — anders als eine rein regelbasierte Version kann ein
+        LLM-Urteil nicht günstig und deterministisch für die Vergangenheit neu berechnet werden. Das Modell ist
+        bewusst winzig gewählt, um ohne API-Schlüssel und ohne laufende Kosten auszukommen — das macht die
+        Einzelanalyse spürbar unzuverlässiger als bei großen Sprachmodellen; die Kalibrierungs-Sperre unten ist hier
+        entsprechend wichtiger als bloße Dekoration. Lernen
         wirkt auf: Positionsgröße je Coin, Verlustserien-Drosselung, Konfidenz-Kalibrierungs-Sperre, sowie Stop-Loss
         (nur enger, nie weiter) und Hebel (nur niedriger, nie höher als eingestellt). Liquidation wird vereinfacht als
         Kapitalverlust der Positions-Margin berechnet (ohne Gebühren/Funding). Keine Anlageberatung, keine Gewinngarantie.
