@@ -2,7 +2,7 @@ import type { CoinListing } from "../types";
 
 // Curated universe of well-established, liquid coins that trade against
 // USDT on Binance — kept to a manageable list so scans/bot runs stay fast
-// and cheap (each coin costs one Gemini call per evaluation cycle).
+// and fast (each coin runs one local-model inference per evaluation cycle).
 export const COINS: CoinListing[] = [
   { id: "bitcoin", symbol: "BTC", name: "Bitcoin", binanceSymbol: "BTCUSDT" },
   { id: "ethereum", symbol: "ETH", name: "Ethereum", binanceSymbol: "ETHUSDT" },

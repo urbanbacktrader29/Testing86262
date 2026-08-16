@@ -70,7 +70,7 @@ const CALIBRATION_BUCKETS: { label: string; min: number; max: number }[] = [
 ];
 
 /**
- * Buckets closed trades by the confidence % Gemini stated at entry and
+ * Buckets closed trades by the confidence % the local model stated at entry and
  * checks how often they actually won — i.e. whether "62% Konfidenz" has
  * meant "wins about 62% of the time" in practice.
  */

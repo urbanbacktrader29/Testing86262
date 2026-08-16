@@ -41,7 +41,7 @@ export default function Signals() {
     });
     setResults(found);
     setLastScanAt(Date.now());
-    if (failures === COINS.length) setError("Scan fehlgeschlagen — KI-Backend nicht erreichbar. Bitte erneut versuchen.");
+    if (failures === COINS.length) setError("Scan fehlgeschlagen — lokales KI-Modell nicht verfügbar (WebGPU-fähiger Browser nötig). Bitte erneut versuchen.");
     setScanning(false);
   }, []);
 
@@ -55,7 +55,7 @@ export default function Signals() {
         <div>
           <h1 className="text-2xl font-semibold text-slate-100">Bestätigte Signale</h1>
           <p className="text-slate-500 text-sm mt-1">
-            Scannt alle {COINS.length} Coins nacheinander (ein Gemini-Aufruf je Coin) und zeigt nur bestätigte Setups.
+            Scannt alle {COINS.length} Coins nacheinander (eine lokale KI-Analyse je Coin, läuft im Browser) und zeigt nur bestätigte Setups.
           </p>
         </div>
         <button

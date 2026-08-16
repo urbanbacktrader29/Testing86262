@@ -147,7 +147,7 @@ export function checkOpenPositionsLive(state: BotState, livePrices: Record<strin
 }
 
 /**
- * Evaluates one coin's freshly-fetched Gemini-backed signal and, if it
+ * Evaluates one coin's freshly-fetched local-AI-backed signal and, if it
  * clears confirmation, calibration, cooldown and position-limit checks,
  * opens a new paper trade sized/leveraged by the bot's adaptive risk rules.
  * Live-only: unlike the previous rule-based version, there is no historical

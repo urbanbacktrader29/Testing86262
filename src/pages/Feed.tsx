@@ -105,14 +105,15 @@ export default function Feed() {
     <div className="flex flex-col gap-4 h-[calc(100vh-8rem)] sm:h-[calc(100vh-9rem)]">
       <div>
         <h1 className="text-2xl font-semibold text-slate-100">Live-Feed</h1>
-        <p className="text-slate-500 text-sm mt-1">Live-Ansicht der Gemini-Flash-Analyse für einen Coin, im Chat-Stil.</p>
+        <p className="text-slate-500 text-sm mt-1">Live-Ansicht der lokalen KI-Analyse für einen Coin, im Chat-Stil.</p>
       </div>
 
       <div className="bg-sky-500/10 border border-sky-500/30 text-sky-200 rounded-lg px-4 py-2.5 text-xs leading-relaxed">
-        <span className="font-semibold">Wichtig:</span> Jeder Analyse-Zyklus ist ein echter Gemini-Flash-Aufruf, der
-        angewiesen wird, mehrere Perspektiven zu simulieren — kein separates Modell pro Perspektive und keine echte
-        Kommunikation zwischen ihnen. Aktualisiert alle {POLL_INTERVAL_MS / 1000}s, solange dieser Tab offen ist (jeder
-        Zyklus kostet eine echte API-Anfrage).
+        <span className="font-semibold">Wichtig:</span> Jeder Analyse-Zyklus ist ein echter Aufruf des lokal in deinem
+        Browser laufenden KI-Modells (Llama 3.2, WebGPU), das angewiesen wird, mehrere Perspektiven zu simulieren —
+        kein separates Modell pro Perspektive und keine echte Kommunikation zwischen ihnen. Aktualisiert alle{" "}
+        {POLL_INTERVAL_MS / 1000}s, solange dieser Tab offen ist — läuft komplett auf deinem Gerät, kein Server sieht
+        deine Daten oder verursacht Kosten.
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">

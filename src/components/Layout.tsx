@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import BottomNav from "./BottomNav";
+import LocalAiStatusBanner from "./LocalAiStatusBanner";
 
 const navItemClass = ({ isActive }: { isActive: boolean }) =>
   `px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -34,6 +35,7 @@ export default function Layout() {
           </nav>
         </div>
       </header>
+      <LocalAiStatusBanner />
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 pb-24 sm:pb-6">
         <Outlet />
       </main>
@@ -42,7 +44,7 @@ export default function Layout() {
         <a href="https://www.binance.com" target="_blank" rel="noreferrer" className="underline hover:text-slate-300">
           Binance
         </a>{" "}
-        · Signale von Gemini Flash (Google) · Keine Anlageberatung
+        · KI-Signale laufen lokal im Browser (Llama 3.2, WebGPU) · Keine Anlageberatung
       </footer>
       <BottomNav />
     </div>

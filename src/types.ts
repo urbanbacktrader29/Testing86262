@@ -30,10 +30,10 @@ export type MarketRegime = "trend" | "range";
 
 /**
  * A compact, purely-computed (no AI involved) snapshot of a coin's current
- * technical state — this is what actually gets sent to Gemini, instead of
- * raw candles, to keep prompts small/cheap and to guarantee the numbers the
- * model reasons about are real, not something it has to (mis)read off a
- * giant array itself.
+ * technical state — this is what actually gets sent to the local model,
+ * instead of raw candles, to keep prompts small/fast and to guarantee the
+ * numbers the model reasons about are real, not something it has to
+ * (mis)read off a giant array itself.
  */
 export interface MarketSnapshot {
   symbol: string;
@@ -66,10 +66,10 @@ export interface TargetLevel {
 }
 
 /**
- * A trading signal for one coin. Direction/confidence/reasoning come from
- * Gemini Flash (see api/signal.ts); entry/stopLoss/takeProfit are computed
- * deterministically from real ATR — never left to the model to invent, so
- * risk levels stay explainable and reproducible.
+ * A trading signal for one coin. Direction/confidence/reasoning come from a
+ * local in-browser model (see services/localAi.ts); entry/stopLoss/
+ * takeProfit are computed deterministically from real ATR — never left to
+ * the model to invent, so risk levels stay explainable and reproducible.
  */
 export interface TradeSignal {
   direction: Direction;

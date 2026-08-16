@@ -35,7 +35,7 @@ export default function SignalPanel({ listing }: { listing: CoinListing }) {
 
   if (loading) {
     return (
-      <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 text-sm text-slate-500">KI-Analyse (Gemini Flash) läuft…</div>
+      <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 text-sm text-slate-500">KI-Analyse läuft (lokal im Browser)…</div>
     );
   }
 
@@ -89,7 +89,7 @@ export default function SignalPanel({ listing }: { listing: CoinListing }) {
       )}
 
       <div className="flex flex-col gap-2 pt-1 border-t border-slate-800">
-        <div className="text-[11px] uppercase tracking-wide text-slate-500 pt-2">Perspektiven (Gemini Flash)</div>
+        <div className="text-[11px] uppercase tracking-wide text-slate-500 pt-2">Perspektiven (lokale KI)</div>
         {signal.personas.map((p) => {
           const badge = voteBadge(p.vote);
           return (
@@ -108,9 +108,10 @@ export default function SignalPanel({ listing }: { listing: CoinListing }) {
       </div>
 
       <p className="text-[11px] text-slate-600 leading-relaxed">
-        Diese Perspektiven werden von einem einzelnen Gemini-Flash-Aufruf simuliert (angewiesen, mehrere Blickwinkel zu
-        berücksichtigen) — keine separaten, unabhängig kommunizierenden Modelle. Entry/SL/TP sind fest aus echter ATR-
-        Volatilität berechnet, nicht vom Modell geschätzt. Keine Anlageberatung.
+        Diese Perspektiven werden von einem einzelnen, lokal in deinem Browser laufenden KI-Modell (Llama 3.2, via
+        WebGPU) simuliert (angewiesen, mehrere Blickwinkel zu berücksichtigen) — keine separaten, unabhängig
+        kommunizierenden Modelle, und kein Server sieht deine Daten. Entry/SL/TP sind fest aus echter ATR-Volatilität
+        berechnet, nicht vom Modell geschätzt. Keine Anlageberatung.
       </p>
     </div>
   );

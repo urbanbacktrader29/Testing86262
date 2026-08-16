@@ -4,8 +4,8 @@ import { atr, ema, rsi, sma } from "./indicators";
 const REGIME_ATR_PCT_THRESHOLD = 0.006; // ATR as a fraction of price above which we call it "trend" rather than "range" — a cheap proxy without needing a full ADX.
 
 /**
- * Reduces a candle series down to the handful of real, computed numbers
- * Gemini actually reasons over. Keeping this deterministic and separate from
+ * Reduces a candle series down to the handful of real, computed numbers the
+ * local model actually reasons over. Keeping this deterministic and separate from
  * the AI call means the price/indicator facts in the prompt are always
  * genuine — the model never has to (mis)read numbers out of a giant array
  * itself, and a bug in a prompt can't silently corrupt the underlying data.
