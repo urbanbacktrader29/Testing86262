@@ -108,11 +108,10 @@ export default function SignalPanel({ listing }: { listing: CoinListing }) {
       </div>
 
       <p className="text-[11px] text-slate-600 leading-relaxed">
-        Diese Perspektiven werden von einem einzelnen, winzigen quelloffenen KI-Modell (SmolLM2-360M, läuft
-        serverseitig, kein API-Schlüssel) simuliert (angewiesen, mehrere Blickwinkel zu berücksichtigen) — keine
-        separaten, unabhängig kommunizierenden Modelle. Ein Modell dieser Größe ist spürbar unzuverlässiger als große
-        Sprachmodelle — Begründungen können ungenau oder inkonsistent sein. Entry/SL/TP sind fest aus echter
-        ATR-Volatilität berechnet, nicht vom Modell geschätzt. Keine Anlageberatung.
+        Diese Perspektiven werden von einem einzelnen, über Groq gehosteten offenen KI-Modell (Llama 3.1 8B)
+        simuliert (angewiesen, mehrere Blickwinkel zu berücksichtigen) — keine separaten, unabhängig
+        kommunizierenden Modelle. Entry/SL/TP sind fest aus echter ATR-Volatilität berechnet, nicht vom Modell
+        geschätzt. Keine Anlageberatung.
       </p>
     </div>
   );

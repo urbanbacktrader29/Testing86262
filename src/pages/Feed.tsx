@@ -109,10 +109,10 @@ export default function Feed() {
       </div>
 
       <div className="bg-sky-500/10 border border-sky-500/30 text-sky-200 rounded-lg px-4 py-2.5 text-xs leading-relaxed">
-        <span className="font-semibold">Wichtig:</span> Jeder Analyse-Zyklus ist ein echter Aufruf eines winzigen,
-        quelloffenen KI-Modells (SmolLM2-360M, serverseitig, kein API-Schlüssel), das angewiesen wird, mehrere
-        Perspektiven zu simulieren — kein separates Modell pro Perspektive und keine echte Kommunikation zwischen
-        ihnen. Ein Modell dieser Größe ist deutlich unzuverlässiger als große Sprachmodelle. Aktualisiert alle{" "}
+        <span className="font-semibold">Wichtig:</span> Jeder Analyse-Zyklus ist ein echter Aufruf eines einzelnen,
+        über Groq gehosteten offenen KI-Modells (Llama 3.1 8B), das angewiesen wird, mehrere Perspektiven zu
+        simulieren — kein separates Modell pro Perspektive und keine echte Kommunikation zwischen ihnen.
+        Aktualisiert alle{" "}
         {POLL_INTERVAL_MS / 1000}s, solange dieser Tab offen ist.
       </div>
 

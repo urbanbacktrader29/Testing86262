@@ -42,7 +42,7 @@ export default function Layout() {
         <a href="https://www.binance.com" target="_blank" rel="noreferrer" className="underline hover:text-slate-300">
           Binance
         </a>{" "}
-        · KI-Signale laufen serverseitig auf einem winzigen, quelloffenen Modell (kein API-Schlüssel) · Keine Anlageberatung
+        · KI-Signale von einem offenen Modell (Llama 3.1, gehostet via Groq) · Keine Anlageberatung
       </footer>
       <BottomNav />
     </div>
