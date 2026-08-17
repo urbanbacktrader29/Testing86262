@@ -1,7 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+  --bg: #fef6e4;
+  --ink: #172c66;
+  --pink: #f582ae;
+  --teal: #8bd3dd;
+  --yellow: #f3d34a;
+  --card: #ffffff;
 }
 
 html,
@@ -10,9 +16,13 @@ body,
   height: 100%;
 }
 
+html {
+  overscroll-behavior: none;
+}
+
 body {
-  background-color: #0b0e14;
-  color: #e2e8f0;
+  background-color: var(--bg);
+  color: var(--ink);
   font-family:
     ui-sans-serif,
     system-ui,
@@ -20,6 +30,14 @@ body {
     "Segoe UI",
     Roboto,
     sans-serif;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+button {
+  font-size: 16px;
 }
 
 .safe-top {
@@ -28,4 +46,9 @@ body {
 
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
 }

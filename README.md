@@ -1,41 +1,50 @@
-# Krypto Analyse Plattform
+# Doodle Party
 
-Live-Marktdaten, Charts und KI-gestützte Signale für Kryptowährungen. Marktdaten kommen von der öffentlichen Binance-API (kein Schlüssel nötig), die Signal-Analyse läuft serverseitig über [Groq](https://console.groq.com) auf einem offenen KI-Modell (Llama 3.1 8B) — Groq bietet dafür eine **kostenlose** API-Stufe an, es fällt aber ein API-Schlüssel an (siehe Deployment unten).
+Multiplayer-Zeichen-&-Rate-Partyspiel (Skribbl-Klon) als mobil-optimierte Web-App. Ein Spieler zeichnet ein Wort, alle anderen raten per Chat um die Wette — schnelles Raten bringt mehr Punkte.
 
 ## Architektur
 
-- **Frontend**: Vite + React + TypeScript + Tailwind CSS, deployt als statische Seite.
-- **Backend**: `api/signal.ts` — eine normale Vercel Node.js-Serverless-Function, die per `fetch()` Groqs OpenAI-kompatible Chat-Completions-API aufruft (`llama-3.1-8b-instant`, `response_format: json_object`). Kein ONNX/WASM-Runtime, keine native Abhängigkeit im Bundle.
-- Ein kompakt berechneter Markt-Snapshot (SMA/EMA/RSI/ATR/Volumen, real aus Binance-Kerzen) wird als Prompt-Kontext an das Modell übergeben, das fünf unabhängige Analysten-Perspektiven simuliert. Die Antwort wird zusätzlich best-effort geparst; schlägt das JSON-Parsing dennoch fehl, liefert das Backend ehrlich ein neutrales, als solches markiertes Ergebnis (`parseFailed: true`) statt zu raten.
-- Entry/Stop-Loss/Take-Profit-Preise werden **deterministisch aus echter ATR-Volatilität berechnet** — nie vom Modell geschätzt.
+- **Frontend**: Vite + React + TypeScript + Tailwind CSS, als statische SPA deployt (React Router für `/` und `/r/:code`).
+- **Backend**: Kein eigener Server — [Supabase](https://supabase.com) übernimmt Datenhaltung, Echtzeit-Sync und Spiellogik:
+  - **Postgres** speichert Räume, Spieler, Chat-Nachrichten.
+  - **Realtime (Postgres Changes)** synchronisiert Raum-/Spieler-/Chat-State live zwischen allen Clients.
+  - **Realtime Broadcast** überträgt die Zeichen-Striche verlustfrei und ohne DB-Last an alle Mitspieler (Zeichnungen werden nicht dauerhaft gespeichert).
+  - **SECURITY DEFINER SQL-Funktionen** (RPC) kapseln jede Spielregel serverseitig: Raum erstellen/beitreten, Spiel starten, Rundenwechsel, Wort-Zuteilung, Rate-Prüfung, Punktevergabe. Das gesuchte Wort liegt in einer Tabelle ohne jegliche Client-Berechtigung (kein `SELECT`-Grant für `anon`/`authenticated`) — nur die Funktion `get_my_word` gibt es gezielt an den aktuellen Zeichner zurück, alle anderen Clients erhalten `null`.
+- **Rundenübergänge sind zeitgesteuert statt host-abhängig**: jeder verbundene Client ruft periodisch `advance_turn()` auf; die Funktion ist idempotent (wirkt nur, wenn die Zeit wirklich abgelaufen ist), sodass das Spiel auch weiterläuft, wenn das Host-Tab im Hintergrund gedrosselt wird — ein häufiges Problem bei mobilen Browsern.
 
-### Vorherige Ansätze (verworfen)
+## Mobile-Optimierung
 
-Vor Groq wurden fünf Ansätze für ein wirklich API-Schlüssel-loses Modell geprüft und verworfen:
+- `viewport-fit=cover` + `env(safe-area-inset-*)` für Geräte mit Notch/Home-Indicator.
+- Touch-first Zeichen-Canvas (Pointer Events, `touch-action: none`, keine versehentliche Seiten-Scroll/Zoom-Gesten beim Malen).
+- `overscroll-behavior: none`, `user-scalable=no` gegen Pull-to-Refresh und Pinch-Zoom während des Spiels.
+- 16px-Mindestschriftgröße auf Eingabefeldern (verhindert automatisches Zoomen auf iOS Safari).
+- Große Touch-Targets (Farbwahl, Buttons), Ein-Hand-Layout mit fixiertem Rate-Eingabefeld am unteren Rand.
+- PWA-Manifest (`public/manifest.webmanifest`) für „Zum Homescreen hinzufügen".
 
-1. **Browser-WebLLM** (`@mlc-ai/web-llm`, Llama-3.2-3B via WebGPU) — der ~2.3GB-Modell-Download hat auf Safari iOS den Browser zum Absturz gebracht.
-2. **`@huggingface/transformers` auf einer normalen Node-Function** — der Node-Build importiert unconditional `onnxruntime-node`, ein natives >500MB-Paket, das in einer normalen Function-Bundle-Größe nicht unterzubringen ist.
-3. **`@huggingface/transformers` auf einer Vercel Edge Function** (Theorie: löst auf die reine WASM-Variante auf) — der Vercel-Build schlug tatsächlich fehl, weil selbst der Web-Build transitiv `onnxruntime-common` referenziert, was Vercels Edge-Bundler-Analyse als nicht unterstütztes Modul ablehnt.
-4. **`@wllama/wllama`** — verlangt laut Quellcode zwingend eine `Worker`-Instanz (`new Worker(...)`), die weder in der Node- noch in der Edge-Runtime von Vercel verfügbar ist. Nie deployt, da dies vorab durch Quellcode-Prüfung erkannt wurde.
-5. **`node-llama-cpp`** — hängt von `cmake-js` ab, was native Kompilierung beim Build nahelegt; als Risiko eingestuft und nicht implementiert.
+## Spielablauf
 
-## Bekannte Grenzen (bitte ehrlich einordnen)
-
-- Groqs kostenlose Stufe hat Rate-Limits; bei sehr häufigen Anfragen kann eine Analyse fehlschlagen (Frontend zeigt das transparent an, kein stiller Fallback).
-- Ein 8B-Parameter-Modell liefert einfachere Begründungen als die größten Modelle (GPT-4-Klasse, Claude etc.), auch wenn es deutlich stärker ist als die zuvor getesteten winzigen On-Device-Modelle.
-- Dieser Ansatz wurde nicht gegen eine echte Vercel-Deployment-Umgebung getestet — reale Grenzen (Rate-Limits, Latenz) zeigen sich erst im Betrieb.
+1. Host erstellt einen Raum → 5-stelliger Code, den er teilt (Web Share API mit Zwischenablage-Fallback).
+2. Mitspieler treten per Code bei (Lobby zeigt Live-Spielerliste).
+3. Host startet mit 2–5 Runden. Jede Runde zeichnet reihum jeder Spieler einmal (80 Sekunden).
+4. Richtige Rate-Treffer geben Punkte nach verbleibender Zeit (10–100), der Zeichner bekommt pro Treffer +20.
+5. Nach der letzten Runde: Endstand mit Podest-Emojis, Host kann eine neue Runde mit denselben Spielern starten.
 
 ## Lokale Entwicklung
 
 ```bash
 npm install
+cp .env.example .env.local   # enthält bereits die Projekt-URL/den publishable Key
 npm run dev
 ```
 
-`npm run dev` startet nur das Frontend (Vite) — `/api`-Routen laufen dabei nicht mit. Für lokale Backend-Tests: `npx vercel dev` (benötigt `GROQ_API_KEY` in einer lokalen `.env`-Datei bzw. den Vercel-Umgebungsvariablen).
-
 ## Deployment
 
-1. Kostenlosen API-Key auf [console.groq.com](https://console.groq.com) erstellen (kein Zahlungsmittel nötig).
-2. Im Vercel-Projekt unter **Settings → Environment Variables** eine Variable `GROQ_API_KEY` mit diesem Key anlegen.
-3. Vercel-Projekt importieren/verbinden — jeder Push deployt Frontend und Backend automatisch zusammen.
+1. Vercel-Projekt mit diesem Repo verbinden.
+2. Environment Variables `VITE_SUPABASE_URL` und `VITE_SUPABASE_ANON_KEY` aus `.env.example` übernehmen (der `anon`/publishable Key ist bewusst öffentlich — Sicherheit läuft über Row Level Security + die serverseitigen RPC-Funktionen, nicht über Geheimhaltung des Keys).
+3. Jeder Push deployt automatisch.
+
+## Bekannte Grenzen
+
+- Kein echtes Nutzerkonto/Auth — die Spieler-Identität ist eine clientseitig generierte ID (persistiert in `localStorage`), ausreichend für ein Party-Spiel unter Freunden, aber nicht manipulationssicher gegenüber technisch versierten Mitspielern (z. B. könnte ein Client mit fremder `player_id` raten).
+- Zeichnungen werden nur per Broadcast übertragen, nicht persistiert — späte Beitritte erhalten einen Snapshot vom aktuellen Zeichner, aber nur wenn dessen Tab gerade aktiv verbunden ist.
+- App-Icons (`public/icon-*.png`) sind Platzhalter aus einem früheren Projekt und noch nicht an das neue Design angepasst.
