@@ -1,7 +1,7 @@
 {
-  "name": "Blitzer-Warner",
-  "short_name": "Blitzer",
-  "description": "Karte, Liste und Live-Warnung vor Blitzern in der Nähe.",
+  "name": "DokuCheck",
+  "short_name": "DokuCheck",
+  "description": "KI-Dokumentenanalyse mit kostenlosem Schwachstellen-Teaser und bezahltem Optimierungs-Report.",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0b0e14",
