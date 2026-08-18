@@ -3,7 +3,7 @@ import { CAMERA_ICONS, CAMERA_LABELS } from "../utils/cameraStyle";
 import { formatDistance } from "../utils/geo";
 
 export default function ListPage() {
-  const { camerasWithDistance, position, removeReport, confirmReport } = useApp();
+  const { camerasWithDistance, position, removeReport, confirmReport, osmLoading } = useApp();
 
   return (
     <div className="space-y-4">
@@ -14,7 +14,8 @@ export default function ListPage() {
         </p>
       </div>
 
-      {camerasWithDistance.length === 0 && (
+      {osmLoading && <p className="text-sm text-slate-500">Lade Blitzerdaten von OpenStreetMap …</p>}
+      {!osmLoading && camerasWithDistance.length === 0 && (
         <p className="text-sm text-slate-500">Keine Blitzer bekannt.</p>
       )}
 
@@ -47,7 +48,7 @@ export default function ListPage() {
                   </button>
                 </div>
               ) : (
-                <span className="text-xs text-slate-500">Demo-Daten</span>
+                <span className="text-xs text-slate-500">OpenStreetMap</span>
               )}
             </div>
           </li>

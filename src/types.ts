@@ -1,6 +1,6 @@
 export type CameraType = "fest" | "mobil" | "abschnitt";
 
-export type CameraSource = "demo" | "user";
+export type CameraSource = "osm" | "user";
 
 /** Ein Blitzer — fest installiert, mobil gemeldet, oder ein Abschnitt (Section Control). */
 export interface Camera {
