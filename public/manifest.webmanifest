@@ -1,13 +1,13 @@
 {
-  "name": "Krypto Analyse Plattform",
-  "short_name": "Krypto Analyse",
-  "description": "Live-Marktdaten, Charts und KI-gestützte Signale für Kryptowährungen.",
-  "start_url": "/",
+  "name": "Blitzer-Warner",
+  "short_name": "Blitzer",
+  "description": "Karte, Liste und Live-Warnung vor Blitzern in der Nähe.",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#0b0e14",
   "theme_color": "#0b0e14",
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }

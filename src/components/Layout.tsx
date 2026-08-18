@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
+import AlertBanner from "./AlertBanner";
 import BottomNav from "./BottomNav";
 
 const navItemClass = ({ isActive }: { isActive: boolean }) =>
@@ -13,36 +14,34 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6">
           <NavLink to="/" className="flex items-center gap-2 shrink-0">
             <img src="/icon-192.png" alt="" className="w-7 h-7 rounded-lg" />
-            <span className="font-semibold text-lg tracking-tight">Krypto Analyse</span>
+            <span className="font-semibold text-lg tracking-tight">Blitzer-Warner</span>
           </NavLink>
           <nav className="hidden sm:flex items-center gap-1">
             <NavLink to="/" end className={navItemClass}>
-              Dashboard
+              Karte
             </NavLink>
-            <NavLink to="/watchlist" className={navItemClass}>
-              Watchlist
+            <NavLink to="/liste" className={navItemClass}>
+              Liste
             </NavLink>
-            <NavLink to="/signals" className={navItemClass}>
-              Signale
+            <NavLink to="/melden" className={navItemClass}>
+              Melden
             </NavLink>
-            <NavLink to="/bot" className={navItemClass}>
-              Bot
-            </NavLink>
-            <NavLink to="/feed" className={navItemClass}>
-              Feed
+            <NavLink to="/einstellungen" className={navItemClass}>
+              Einstellungen
             </NavLink>
           </nav>
         </div>
       </header>
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 pb-24 sm:pb-6">
+      <AlertBanner />
+      <main className="flex-1 min-w-0 max-w-7xl w-full mx-auto px-4 py-6 pb-24 sm:pb-6">
         <Outlet />
       </main>
       <footer className="hidden sm:block border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        Marktdaten von{" "}
-        <a href="https://www.binance.com" target="_blank" rel="noreferrer" className="underline hover:text-slate-300">
-          Binance
+        Kartendaten von{" "}
+        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer" className="underline hover:text-slate-300">
+          OpenStreetMap
         </a>{" "}
-        · KI-Signale von einem offenen Modell (Llama 3.1, gehostet via Groq) · Keine Anlageberatung
+        · Blitzerdaten: Demo-Datensatz + lokale Meldungen · Bitte während der Fahrt nicht bedienen
       </footer>
       <BottomNav />
     </div>
