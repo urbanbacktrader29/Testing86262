@@ -1,14 +1,17 @@
 # Blitzer-Warner
 
-Eine Web-App, die Blitzer auf einer Karte anzeigt, per GPS warnt, sobald einer in Reichweite kommt, und es
-erlaubt, mobile Blitzer für andere Nutzer:innen desselben Geräts zu melden — ähnlich im Konzept zu Apps wie
-Blitzer.de, aber als eigenständige, quelloffene Umsetzung ohne deren Daten, Marke oder Backend.
+Eine Web-App, die echte Blitzerstandorte auf einer Karte anzeigt, per GPS warnt, sobald einer in Reichweite kommt,
+und es erlaubt, mobile Blitzer live für alle anderen Nutzer:innen zu melden — ähnlich im Konzept zu Apps wie
+Blitzer.de, aber als eigenständige, quelloffene Umsetzung mit legal nutzbaren Daten statt deren proprietärer
+Datenbank.
 
 ## Funktionen
 
-- **Karte** (`/`): OpenStreetMap-Kartenansicht mit eigenem Standort, Warnradius-Kreis und allen bekannten Blitzern.
+- **Karte** (`/`): OpenStreetMap-Kartenansicht mit eigenem Standort, Warnradius-Kreis und allen bekannten Blitzern;
+  Button, um Blitzerdaten für den gerade sichtbaren Kartenausschnitt nachzuladen.
 - **Liste** (`/liste`): Alle Blitzer sortiert nach Entfernung zum aktuellen Standort.
-- **Melden** (`/melden`): Einen mobilen Blitzer an der aktuellen Position melden (Typ, optionales Tempolimit, Notiz).
+- **Melden** (`/melden`): Einen mobilen Blitzer an der aktuellen Position melden (Typ, optionales Tempolimit,
+  Notiz) — erscheint in Echtzeit bei allen anderen Nutzer:innen.
 - **Einstellungen** (`/einstellungen`): Warnradius, Warnton an/aus, Live-Ortung an/aus, Gültigkeitsdauer gemeldeter
   Blitzer.
 - **Live-Warnung**: Sobald ein Blitzer innerhalb des eingestellten Radius liegt, erscheint ein Banner mit
@@ -16,16 +19,23 @@ Blitzer.de, aber als eigenständige, quelloffene Umsetzung ohne deren Daten, Mar
 
 ## Architektur
 
-- **Frontend**: Vite + React + TypeScript + Tailwind CSS, deployt als statische Seite. Kein Backend/API nötig.
+- **Frontend**: Vite + React + TypeScript + Tailwind CSS, deployt als statische Seite.
 - **Karte**: [Leaflet](https://leafletjs.com) + `react-leaflet`, Kacheln von OpenStreetMap.
-- **Standort**: Browser-Geolocation-API (`watchPosition`), lokal per React-Context an alle Seiten verteilt.
-- **Datenhaltung**: Alles läuft rein im Browser über `localStorage` — Einstellungen und gemeldete Blitzer bleiben
-  auf dem jeweiligen Gerät, es gibt keinen Server, der Daten zwischen Geräten synchronisiert.
-- **Blitzerdaten**: Fest installierte Blitzer sind ein kleiner **Demo-Datensatz** (`src/data/cameras.ts`) für ein
-  paar deutsche Städte. Es gibt keine offene, lizenzfreie Datenbank aller echten Blitzerstandorte — für einen
-  produktiven Einsatz müsste dieser Datensatz durch eine lizenzierte Quelle oder eine selbst gepflegte, geteilte
-  Datenbank (z. B. über ein eigenes Backend) ersetzt werden. Mobile Blitzer kommen ausschließlich aus eigenen
-  Meldungen über die App und laufen nach der eingestellten Zeit automatisch ab.
+- **Standort**: Browser-Geolocation-API (`watchPosition`), per React-Context an alle Seiten verteilt.
+- **Feste Blitzer & Abschnittskontrollen — echte, weltweite Daten**: live von
+  [OpenStreetMap](https://www.openstreetmap.org) über die [Overpass API](https://overpass-api.de) geladen
+  (`highway=speed_camera`, `enforcement=maxspeed`), rund um den eigenen Standort bzw. den sichtbaren
+  Kartenausschnitt. OSM ist eine offene, community-gepflegte Datenbank (ODbL-Lizenz) — die Abdeckung ist je nach
+  Region unterschiedlich vollständig (in Mitteleuropa i. d. R. sehr gut), aber es handelt sich um reale, keine
+  erfundenen Standorte. **Bewusst nicht verwendet: Daten von Blitzer.de oder vergleichbaren kommerziellen
+  Anbietern** — deren Datenbanken sind proprietär/lizenziert, es gibt keine öffentliche API, und automatisiertes
+  Abgreifen würde deren Nutzungsbedingungen verletzen.
+- **Mobile Blitzer — echte Synchronisierung**: Meldungen landen in einer [Supabase](https://supabase.com)-Postgres-
+  Datenbank und werden per Supabase Realtime (WebSocket) live an alle verbundenen Geräte verteilt — meldet
+  jemand einen Blitzer, taucht er sofort bei allen anderen auf, nicht nur lokal im eigenen Browser.
+  ⚠️ Es gibt (noch) kein Login-System: Meldungen sind anonym, und da die Datenbank-Policies entsprechend offen
+  sind, kann aktuell jede Person jede Meldung bestätigen oder löschen. Für einen Einsatz mit höherem
+  Missbrauchsrisiko sollte das durch Auth + engere Row-Level-Security-Policies ersetzt werden.
 
 ## Rechtlicher Hinweis
 
@@ -41,13 +51,14 @@ npm install
 npm run dev
 ```
 
-Für Live-Standort und Kartenkacheln wird eine Internetverbindung sowie (im Browser) die Freigabe des Standorts
-benötigt. Ohne Standortfreigabe funktionieren Karte und Liste weiterhin, aber ohne Entfernungsangaben oder
-Live-Warnung.
+Für Live-Standort, Kartenkacheln, OpenStreetMap-Blitzerdaten und die Supabase-Synchronisierung wird eine
+Internetverbindung sowie (im Browser) die Freigabe des Standorts benötigt. Ohne Standortfreigabe funktionieren
+Karte und Liste weiterhin, aber ohne Entfernungsangaben, automatisches Nachladen oder Live-Warnung.
 
 ## Deployment
 
-Statische Vite-App, kein Backend/API-Key nötig.
+Statische Vite-App, kein eigener Server nötig — Supabase-URL und -Publishable-Key sind bewusst im Client-Bundle
+(siehe `src/services/supabase.ts`; geschützt über Row-Level-Security, nicht über Geheimhaltung des Keys).
 
 **Vercel**: Projekt importieren, `npm run build` als Build-Command, `dist` als Output.
 

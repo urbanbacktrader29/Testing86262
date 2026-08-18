@@ -41,7 +41,7 @@ export default function Layout() {
         <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer" className="underline hover:text-slate-300">
           OpenStreetMap
         </a>{" "}
-        · Blitzerdaten: Demo-Datensatz + lokale Meldungen · Bitte während der Fahrt nicht bedienen
+        · Blitzerdaten: OpenStreetMap + live synchronisierte Community-Meldungen · Bitte während der Fahrt nicht bedienen
       </footer>
       <BottomNav />
     </div>

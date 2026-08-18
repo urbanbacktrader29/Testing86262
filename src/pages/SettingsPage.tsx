@@ -67,7 +67,7 @@ export default function SettingsPage() {
           onChange={(e) => updateSettings({ reportLifetimeHours: Number(e.target.value) })}
           className="w-full accent-emerald-500"
         />
-        <p className="text-xs text-slate-500">Danach werden mobile Meldungen automatisch entfernt.</p>
+        <p className="text-xs text-slate-500">Danach werden mobile Meldungen in dieser App ausgeblendet (bleiben aber gespeichert).</p>
       </div>
 
       <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 text-xs text-slate-500 space-y-2">
@@ -77,8 +77,10 @@ export default function SettingsPage() {
           Gerät nicht während der Fahrt bedienen und die jeweils geltenden gesetzlichen Vorschriften beachten.
         </p>
         <p>
-          Fest installierte Blitzer stammen aus einem kleinen Demo-Datensatz, mobile Blitzer aus Meldungen auf diesem
-          Gerät — es handelt sich nicht um eine amtliche oder vollständige Datenquelle.
+          Fest installierte Blitzer und Abschnittskontrollen stammen live von OpenStreetMap (weltweit, community-gepflegt,
+          keine amtliche oder vollständige Quelle). Mobile Blitzer sind anonyme Meldungen anderer Nutzer:innen, in
+          Echtzeit über alle Geräte synchronisiert — es gibt aktuell kein Login, jede Person kann jede Meldung
+          bestätigen oder löschen.
         </p>
       </div>
     </div>
