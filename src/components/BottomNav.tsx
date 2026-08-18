@@ -8,11 +8,10 @@ interface NavItem {
 }
 
 const ITEMS: NavItem[] = [
-  { to: "/", end: true, label: "Dashboard", icon: "▤" },
-  { to: "/watchlist", label: "Watchlist", icon: "★" },
-  { to: "/signals", label: "Signale", icon: "◈" },
-  { to: "/bot", label: "Bot", icon: "🤖" },
-  { to: "/feed", label: "Feed", icon: "💬" },
+  { to: "/", end: true, label: "Karte", icon: "🗺️" },
+  { to: "/liste", label: "Liste", icon: "📋" },
+  { to: "/melden", label: "Melden", icon: "➕" },
+  { to: "/einstellungen", label: "Einstellungen", icon: "⚙️" },
 ];
 
 export default function BottomNav() {
