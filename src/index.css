@@ -2,6 +2,13 @@
 
 :root {
   color-scheme: dark;
+  --bg: #070914;
+  --bg-elevated: #0e1120;
+  --border: #1e2338;
+  --accent-from: #7c5cff;
+  --accent-to: #22d3ee;
+  --text: #e7e9f5;
+  --text-muted: #8b90ab;
 }
 
 html,
@@ -11,8 +18,12 @@ body,
 }
 
 body {
-  background-color: #0b0e14;
-  color: #e2e8f0;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(60rem 30rem at 85% -10%, rgba(124, 92, 255, 0.18), transparent),
+    radial-gradient(50rem 25rem at -10% 20%, rgba(34, 211, 238, 0.12), transparent);
+  background-attachment: fixed;
+  color: var(--text);
   font-family:
     ui-sans-serif,
     system-ui,
@@ -28,4 +39,34 @@ body {
 
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.brand-gradient-text {
+  background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-gradient-bg {
+  background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+}
+
+.card {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+}
+
+.input {
+  background-color: #0a0d1c;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  color: var(--text);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-to);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
 }

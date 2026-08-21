@@ -1,13 +1,10 @@
 {
-  "name": "DokuCheck",
-  "short_name": "DokuCheck",
-  "description": "KI-Dokumentenanalyse mit kostenlosem Schwachstellen-Teaser und bezahltem Optimierungs-Report.",
+  "name": "NovaRamp — Krypto einfach kaufen",
+  "short_name": "NovaRamp",
+  "description": "Fiat-zu-Krypto-Kauf mit Live-Anbietervergleich, Wallet-Anbindung und sicherem Checkout.",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#0b0e14",
-  "theme_color": "#0b0e14",
-  "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ]
+  "background_color": "#070914",
+  "theme_color": "#070914",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
 }
